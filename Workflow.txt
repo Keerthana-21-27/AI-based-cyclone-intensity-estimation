@@ -1,0 +1,117 @@
+Dataset Link : https://www.kaggle.com/datasets/sakthimahendran/cyclone-intensity-prediction-indianocean/data
+
+1. Data Collection
+   - Collect infrared satellite cyclone images from the Indian Ocean region.
+   - Store images in directory: Cylone_Intensity_IndianOcean/Infrared
+   - Load cyclone intensity labels (Vmax) from label.csv.
+
+2. Data Validation
+   - Verify existence of each image listed in label.csv.
+   - Identify and skip missing or corrupted image files.
+
+3. Image Preprocessing
+   - Read images using OpenCV.
+   - Convert images from BGR to RGB.
+   - Resize images to 128 × 128 pixels.
+   - Apply VGG-style preprocessing (mean subtraction & scaling).
+   - Convert images and labels into NumPy arrays.
+
+4. Dataset Splitting
+   - Split the dataset into:
+     - 80% training data
+     - 20% validation data
+   - Use fixed random seed for reproducibility.
+
+5. Model Architecture Design
+   - Use transfer learning with pre-trained CNN backbones:
+     - VGG16
+     - VGG19
+     - ResNet50
+     - Xception
+     - DenseNet121
+     - EfficientNetB0
+   - Remove top classification layers.
+   - Add:
+     - Global Average Pooling
+     - Fully connected dense layers
+     - Dropout for regularization
+     - Linear output neuron for regression.
+
+6. Fine-Tuning Strategy
+   - Freeze early convolution layers.
+   - Unfreeze last convolution blocks for model-specific fine-tuning.
+   - Train only selected layers to avoid overfitting.
+
+7. Model Compilation
+   - Optimizer: Adam (learning rate = 1e-4)
+   - Loss function: Mean Squared Error (MSE)
+   - Metric: Custom R² (coefficient of determination)
+
+8. Model Training
+   - Train each model for up to 100 epochs.
+   - Use callbacks:
+     - EarlyStopping (restore best weights)
+     - ReduceLROnPlateau (adaptive learning rate)
+   - Shuffle training data each epoch.
+
+9. Model Evaluation
+   - Predict cyclone intensity on validation data.
+   - Compute performance metrics:
+     - Mean Absolute Error (MAE)
+     - Root Mean Squared Error (RMSE)
+     - R² Score
+   - Plot:
+     - Training vs Validation Loss curves
+     - Training vs Validation R² curves.
+
+10. Model Saving
+    - Save trained models in HDF5 format (.h5).
+    - Save EfficientNetB0 weights separately.
+
+11. Model Comparison
+    - Store evaluation metrics for all models.
+    - Create comparison table (MAE, RMSE, R²).
+    - Visualize results using bar plots.
+
+12. Best Model Selection
+    - Select the model with lowest RMSE and highest R² score.
+    - Use VGG16 model for deployment.
+
+13. Flask Web Application Development
+    - Build Flask backend for inference.
+    - Allow users to upload cyclone infrared images.
+    - Load trained VGG16 regression model.
+
+14. Inference & Visualization
+    - Preprocess uploaded image.
+    - Predict cyclone intensity (Vmax).
+    - Generate visual outputs:
+      - Raw infrared image
+      - Brightness temperature contour map
+      - Calibrated brightness temperature image
+      - 3D cloud height surface plot
+
+15. Web Interface
+    - Design HTML interface for image upload and result display.
+    - Show predicted cyclone intensity and generated visualizations.
+
+16. Deployment
+    - Run Flask application locally.
+    - Enable real-time cyclone intensity estimation from uploaded images.
+
+Extension:
+==========
+
+	- This work proposes an AI-based method to estimate tropical cyclone intensity using INSAT-3D infrared satellite images. The Deep Learning models with transfer learning provides accurate predictions, supporting improved cyclone monitoring and disaster preparedness.
+	
+	- As an extension, we developed multiple deep learning models and compared their performance. Among them, the ResNet50 model outperformed the others and achieved the best results.
+
+	- Furthermore, the Flask framework was utilized to develop an interactive user interface that allows users to provide audio inputs and obtain predictions using the trained models on the dataset.
+
+
+
+
+
+
+
+
